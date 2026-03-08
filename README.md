@@ -126,4 +126,176 @@ call() invokes the function immediately with arguments passed individually.
 apply() invokes the function immediately but arguments are passed as an array.
 
 bind() does not execute immediately; it returns a new function with this bound to the specified object.
+
 ```
+Promises in JavaScript
+Definition
+
+A Promise in JavaScript is an object that represents the eventual completion (success) or failure of an asynchronous operation and its resulting value.
+
+It helps handle asynchronous operations like:
+
+API calls
+
+File reading
+
+Database requests
+
+Timers
+
+Promises help avoid callback hell and make asynchronous code cleaner and more readable.
+
+Promise States
+
+A Promise has 3 states:
+
+Pending
+
+Initial state
+
+Operation is still running
+
+Fulfilled (Resolved)
+
+Operation completed successfully
+
+Returns a result
+
+Rejected
+
+Operation failed
+
+Returns an error
+
+Example flow:
+
+Pending → Fulfilled
+Pending → Rejected
+Promise Syntax
+const promise = new Promise((resolve, reject) => {
+   // async operation
+});
+
+resolve() → called when operation is successful
+
+reject() → called when operation fails
+
+Basic Example
+const myPromise = new Promise((resolve, reject) => {
+
+  let success = true;
+
+  if (success) {
+    resolve("Operation Successful");
+  } else {
+    reject("Operation Failed");
+  }
+
+});
+
+myPromise
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+Output
+
+Operation Successful
+Real Example (setTimeout)
+const fetchData = new Promise((resolve, reject) => {
+
+  setTimeout(() => {
+    resolve("Data fetched successfully");
+  }, 2000);
+
+});
+
+fetchData.then((data) => {
+  console.log(data);
+});
+
+Output after 2 seconds
+
+Data fetched successfully
+Handling Errors
+const checkNumber = new Promise((resolve, reject) => {
+
+  let num = -5;
+
+  if (num > 0) {
+    resolve("Positive number");
+  } else {
+    reject("Negative number");
+  }
+
+});
+
+checkNumber
+  .then((result) => console.log(result))
+  .catch((error) => console.log(error));
+
+Output
+
+Negative number
+Promise Chaining (Important Interview Topic)
+const promise = new Promise((resolve) => {
+  resolve(10);
+});
+
+promise
+  .then((num) => {
+    return num * 2;
+  })
+  .then((num) => {
+    return num * 3;
+  })
+  .then((result) => {
+    console.log(result);
+  });
+
+Output
+
+60
+Promise Methods (Common Interview Question)
+1. Promise.all()
+
+Runs multiple promises in parallel.
+
+Promise.all([promise1, promise2])
+  .then((results) => console.log(results));
+
+If one fails → all fail.
+
+2. Promise.race()
+
+Returns the first promise that completes.
+
+Promise.race([promise1, promise2])
+3. Promise.allSettled()
+
+Returns results of all promises (success or failure).
+
+4. Promise.any()
+
+Returns the first successful promise.
+
+Simple Interview Answer
+
+You can say this in interviews:
+
+A Promise in JavaScript is an object used to handle asynchronous operations. It represents a value that may be available now, later, or never. A Promise has three states: pending, fulfilled, and rejected. It uses .then() for success handling and .catch() for error handling, which helps avoid callback hell and makes asynchronous code more readable.
+
+If you want, I can also explain these very important interview topics next:
+
+Async / Await in JavaScript
+
+Callback Hell
+
+Event Loop
+
+Microtask Queue vs Callback Queue
+
+Fetch API with Promises
