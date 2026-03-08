@@ -299,3 +299,208 @@ Event Loop
 Microtask Queue vs Callback Queue
 
 Fetch API with Promises
+Callback Hell
+
+Async / Await
+
+Event Loop
+
+Microtask Queue vs Callback Queue
+
+I'll explain them simply with theory + examples.
+
+1. Callback Hell
+Definition
+
+Callback Hell happens when multiple asynchronous operations are nested inside callbacks, making the code hard to read and maintain.
+
+This creates a pyramid structure.
+
+Example
+setTimeout(() => {
+  console.log("Step 1");
+
+  setTimeout(() => {
+    console.log("Step 2");
+
+    setTimeout(() => {
+      console.log("Step 3");
+    }, 1000);
+
+  }, 1000);
+
+}, 1000);
+
+Structure becomes like:
+
+setTimeout
+   └── setTimeout
+        └── setTimeout
+Problem
+
+Hard to read
+
+Hard to debug
+
+Hard to maintain
+
+Solution
+
+Use:
+
+Promises
+
+Async/Await
+
+2. Async / Await
+Definition
+
+async/await is a modern way to handle promises, making asynchronous code look like synchronous code.
+
+Rules
+
+async → makes a function return a Promise
+
+await → waits for a Promise to resolve
+
+Example with Promise
+function fetchData() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Data received");
+    }, 2000);
+  });
+}
+
+async function getData() {
+  const result = await fetchData();
+  console.log(result);
+}
+
+getData();
+
+Output after 2 seconds
+
+Data received
+Error Handling
+async function getData() {
+  try {
+    const data = await fetchData();
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+3. Event Loop (Very Important Interview Topic)
+Definition
+
+The Event Loop is a mechanism that allows JavaScript to perform non-blocking asynchronous operations even though JavaScript is single-threaded.
+
+It manages execution between:
+
+Call Stack
+
+Web APIs
+
+Callback Queue
+
+Microtask Queue
+
+Flow
+Call Stack → Web APIs → Callback Queue → Event Loop → Call Stack
+Example
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timer");
+}, 0);
+
+console.log("End");
+
+Output
+
+Start
+End
+Timer
+Why?
+
+Because:
+
+setTimeout goes to Web API
+
+Then to Callback Queue
+
+Event Loop executes it after call stack is empty
+
+4. Microtask Queue vs Callback Queue
+
+This is a very common interview question.
+
+Callback Queue (Macrotask)
+
+Contains:
+
+setTimeout
+
+setInterval
+
+DOM events
+
+setImmediate
+
+Example:
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+Microtask Queue
+
+Contains:
+
+Promise .then()
+
+catch()
+
+finally()
+
+queueMicrotask()
+
+MutationObserver
+
+Example:
+
+Promise.resolve().then(() => {
+  console.log("Promise");
+});
+Important Rule
+
+Microtask Queue executes BEFORE Callback Queue
+
+Interview Example
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("Promise");
+});
+
+console.log("End");
+
+Output
+
+Start
+End
+Promise
+Timeout
+
+Execution Order:
+
+Call Stack → Microtask Queue → Callback Queue
+Best Short Interview Explanation
+
+You can say this:
+
+JavaScript is single-threaded but handles asynchronous operations using the Event Loop. The Event Loop manages tasks between the Call Stack, Web APIs, Microtask Queue, and Callback Queue. Promises and async/await help avoid callback hell and make asynchronous code more readable. Microtasks like Promise callbacks execute before macrotasks like setTimeout.
